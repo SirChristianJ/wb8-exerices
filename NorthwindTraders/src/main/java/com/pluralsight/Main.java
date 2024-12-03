@@ -68,16 +68,20 @@ public class Main {
                     unitInStock = results.getInt("UnitsInStock");
                     unitPrice = results.getDouble("UnitPrice");
 
-                    System.out.println(productId + "\t" + product + "\t" + unitInStock + "\t" + unitPrice);
+                    System.out.println(productId + "|" + product + "|" + unitInStock + "|" + unitPrice);
                 }
             }
             else if (userChoice == 2) {
-                statement = connection.prepareStatement("SELECT * FROM northwind.customers;");
+                String query1 = "SELECT * FROM northwind.customers ";
+                String query2 = "ORDER BY country;";
+                String finalQuery = query1 + query2;
+
+                statement = connection.prepareStatement(finalQuery);
 
                 results = statement.executeQuery();
 
-                System.out.println("ID" + "|" + "Company_Name" + "|" + "Contact_Name" + "|" + "Contact_Title");
-                System.out.println("------------------------------------------");
+                System.out.println("ID" + "|" + "Company_Name" + "|" + "Contact_Name" + "|" + "City" + "|" + "Country" + "|" + "Phone");
+                System.out.println("---------------------------------------------------------------");
 
                 // process the results
                 while (true) {
@@ -87,14 +91,19 @@ public class Main {
                     String customerId  = null;
                     String companyName = null;
                     String contactName = null;
-                    String contactTitle = null;
+                    String city = null;
+                    String country = null;
+                    String phone = null;
+
 
                     customerId = results.getString("CustomerID");
                     companyName = results.getString("CompanyName");
                     contactName = results.getString("ContactName");
-                    contactTitle = results.getString("ContactTitle");
+                    city = results.getString("City");
+                    country = results.getString("Country");
+                    phone = results.getString("Phone");
 
-                    System.out.println(customerId + "\t" + companyName + "\t" + contactName + "\t" + contactTitle);
+                    System.out.println(customerId + "|" + companyName + "|" + contactName + "|" + city + "|" + country + "|" + phone);
                 }
             }
         }
@@ -106,17 +115,17 @@ public class Main {
             try {
                 connection.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
             try {
                 statement.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
             try {
                 results.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
